@@ -3,10 +3,10 @@
 # * https://www.youtube.com/playlist?list=PL_RrEj88onS-um2xFy01sY46ik_2yt_EQ
 
 name: GitHub Actions Demo # what this file is for
-on: [push] # run when there's a git push to GitHub
-# on:
-#   push:
-#     branches: [github_actions]
+# on: [push] # run when there's a git push to GitHub
+on:
+  push:
+    branches: make_unittest
 jobs: # list of jobs to do
   Explore-GitHub-Actions: # name of this current job
     runs-on: ubuntu-latest # Operating System to run on
