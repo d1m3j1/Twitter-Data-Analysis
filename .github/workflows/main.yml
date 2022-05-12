@@ -6,7 +6,8 @@ name: GitHub Actions Demo # what this file is for
 # on: [push] # run when there's a git push to GitHub
 on:
   push:
-    branches: make_unittest
+    branches: 
+       - make_unittest
 jobs: # list of jobs to do
   Explore-GitHub-Actions: # name of this current job
     runs-on: ubuntu-latest # Operating System to run on
