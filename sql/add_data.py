@@ -78,7 +78,7 @@ def createTables(dbName: str) -> None:
 
     """
     conn, cur = DBConnect(config.host, config.user, config.passwd, dbName)
-    sqlFile = 'schema.sql'
+    sqlFile = '/home/codeally/project/Twitter-Data-Analysis/sql/schema.sql'
     fd = open(sqlFile, 'r')
     readSqlFile = fd.read()
     fd.close()
@@ -112,7 +112,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     -------
 
     """
-    cols_2_drop = ['original_text']
+    # cols_2_drop = ['original_text']
     try:
         # df = df.drop(columns=cols_2_drop, axis=1)
         df = df.fillna(0)
@@ -193,7 +193,7 @@ def db_execute_fetch(*args, many=False, tablename='', rdf=True, **kwargs) -> pd.
     -------
 
     """
-    connection, cursor1 = DBConnect(**kwargs)
+    connection, cursor1 = DBConnect(config.host, config.user, config.passwd,**kwargs)
     if many:
         cursor1.executemany(*args)
     else:
