@@ -190,5 +190,3 @@ if __name__ == "__main__":
     _, tweet_list = read_json("/home/codeally/project/Twitter-Data-Analysis/data/Economic_Twitter_Data.json")
     tweet = TweetDfExtractor(tweet_list)
     tweet_df = tweet.get_tweet_df(True) 
-
-    
