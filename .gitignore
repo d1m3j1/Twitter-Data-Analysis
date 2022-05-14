@@ -1,4 +1,3 @@
 __pycache__/
 data/Economic_Twitter_Data.json
 processed_tweet_data.csv
-sql/config.py
