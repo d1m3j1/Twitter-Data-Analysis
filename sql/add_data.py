@@ -78,7 +78,7 @@ def createTables(dbName: str) -> None:
 
     """
     conn, cur = DBConnect(config.host, config.user, config.passwd, dbName)
-    sqlFile = '/home/codeally/project/Twitter-Data-Analysis/sql/schema.sql'
+    sqlFile = '../sql/schema.sql'
     fd = open(sqlFile, 'r')
     readSqlFile = fd.read()
     fd.close()
