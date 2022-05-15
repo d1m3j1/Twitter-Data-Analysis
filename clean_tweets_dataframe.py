@@ -25,7 +25,6 @@ class Clean_Tweets:
         columns = ['statuses_count', 'created_at', 'source', 'original_text','polarity','subjectivity', 'lang', 'favorite_count', 'retweet_count', 
             'screen_name', 'followers_count','friends_count','sensitivity', 'hashtags', 'user_mentions', 'place']
         unwanted_rows = [] 
-        # df[df['retweet_count'] == 'retweet_count' ].index
         for colName in columns: 
             unwanted_rows = self.df[self.df[colName] == colName].index
             self.df.drop(unwanted_rows , inplace=True)
@@ -45,6 +44,7 @@ class Clean_Tweets:
 
     def convert_to_datetime(self)->pd.DataFrame:
         self.df['created_at'] = pd.to_datetime(self.df['created_at'], errors = 'coerce')
+        self.df['created_at'] = self.df['created_at'].apply(lambda x : x.strftime('%Y-%m-%d'))
         self.df = self.df[self.df['created_at'] >= '2020-12-31']
         return self.df
     
@@ -64,18 +64,17 @@ class Clean_Tweets:
         return self.df
 
     def clean_tweet(self) -> pd.DataFrame:
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: emoji_pattern.sub(r'', x)) #Remove emojis
-        self.df['original_text'] = re.sub(r'RT @\w+:', '', self.df['original_text'])
-        # self.df['original_text'] = self.df['original_text'].apply(lambda x: re.sub(r'RT @\w+:', '',x))#Remove identifications
-        # self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'@\w+', '', x)) #Remove mentions
-        # self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'https,?://[^/s]+[/s]?', '', x))#Remove links
-        # self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'\b\w{1,2}\b', '',x))#Remove words with 2 or fewer letters
+        self.df['clean_tweets'] = self.df['original_text'].apply(lambda x: emoji_pattern.sub(r'', x)) #Remove emojis
+        self.df['clean_tweets'] = re.sub(r'RT @\w+:', '', str(self.df['original_text']))#Remove identifications
+        self.df['clean_tweets'] = re.sub(r'@\w+', '', str(self.df['original_text'])) #Remove mentions
+        self.df['clean_tweets'] = re.sub(r'https,?://[^/s]+[/s]?', '', str(self.df['original_text']))#Remove links
+        self.df['clean_tweets'] = re.sub(r'\b\w{1,2}\b', '',str(self.df['original_text']))#Remove words with 2 or fewer letters
         return self.df
 
     def fill_nullvalues(self) -> pd.DataFrame:
         self.df['polarity'] = self.df['polarity'].fillna(False)
         self.df['created_at'] = self.df['created_at'].fillna(" ")
-        self.df['location'] = self.df['location'].fillna(" ")
+        self.df['place'] = self.df['place'].fillna(" ")
         self.df['hashtags'] = self.df['hashtags'].fillna(" ")
         self.df['user_mentions'] = self.df['user_mentions'].fillna(" ")
         self.df['retweet_count'] = self.df['retweet_count'].fillna(0)
