@@ -65,10 +65,11 @@ class Clean_Tweets:
 
     def clean_tweet(self) -> pd.DataFrame:
         self.df['original_text'] = self.df['original_text'].apply(lambda x: emoji_pattern.sub(r'', x)) #Remove emojis
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: re.sub(r'RT @\w+:', '',x))#Remove identifications
-        self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'@\w+', '', x)) #Remove mentions
-        self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'https,?://[^/s]+[/s]?', '', x))#Remove links
-        self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'\b\w{1,2}\b', '',x))#Remove words with 2 or fewer letters
+        self.df['original_text'] = re.sub(r'RT @\w+:', '', self.df['original_text'])
+        # self.df['original_text'] = self.df['original_text'].apply(lambda x: re.sub(r'RT @\w+:', '',x))#Remove identifications
+        # self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'@\w+', '', x)) #Remove mentions
+        # self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'https,?://[^/s]+[/s]?', '', x))#Remove links
+        # self.df['original_text'] = self.df['original_text'].apply(lambda X: re.sub(r'\b\w{1,2}\b', '',x))#Remove words with 2 or fewer letters
         return self.df
 
     def fill_nullvalues(self) -> pd.DataFrame:
