@@ -26,7 +26,7 @@ def DBConnect(host_name, user_name, user_passwd, dbName=None):
     return conn, cur
 
 def emojiDB(dbName: str) -> None:
-    conn, cur = DBConnect(config.host, config.user, config.passwd, dbName)
+    conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'), dbName)
     try:
         dbQuery = f"ALTER DATABASE {dbName} CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;"
         cur.execute(dbQuery)
@@ -52,7 +52,7 @@ def createDB(dbName: str) -> None:
 
     """
     try:
-        conn, cur = DBConnect(config.host, config.user, config.passwd)
+        conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'))
         cur.execute(f"CREATE DATABASE IF NOT EXISTS {dbName};")
         conn.commit()
         cur.close()
@@ -77,8 +77,8 @@ def createTables(dbName: str) -> None:
     -------
 
     """
-    conn, cur = DBConnect(config.host, config.user, config.passwd, dbName)
-    sqlFile = '../sql/schema.sql'
+    conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'), dbName)
+    sqlFile = '/home/codeally/project/Twitter-Data-Analysis/sql/schema.sql'
     fd = open(sqlFile, 'r')
     readSqlFile = fd.read()
     fd.close()
@@ -150,12 +150,12 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     -------
 
     """
-    conn, cur = DBConnect(config.host, config.user, config.passwd,dbName)
+    conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'),dbName)
 
     df = preprocess_df(df)
 
     for _, row in df.iterrows():
-        sqlQuery = f"""INSERT INTO {table_name} (statuses_count, created_at, source, sentiment, polarity, subjectivity, lang,
+        sqlQuery = f"""INSERT INTO {table_name} (statuses_count, created_at, source, original_text, polarity, subjectivity, lang,
                     favorite_count, retweet_count, screen_name, followers_count, friends_count, sensitivity,
                     hashtags, user_mentions, place)
              VALUES(%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
@@ -193,7 +193,7 @@ def db_execute_fetch(*args, many=False, tablename='', rdf=True, **kwargs) -> pd.
     -------
 
     """
-    connection, cursor1 = DBConnect(config.host, config.user, config.passwd,**kwargs)
+    connection, cursor1 = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'),**kwargs)
     if many:
         cursor1.executemany(*args)
     else:
@@ -225,6 +225,6 @@ if __name__ == "__main__":
     emojiDB(dbName='tweets')
     createTables(dbName='tweets')
 
-    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/processed_tweet_data.csv')
+    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/clean_economic_data.csv')
 
     insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')

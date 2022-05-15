@@ -2,4 +2,4 @@ __pycache__/
 data/Economic_Twitter_Data.json
 data/processed_tweet_data.csv
 data/clean_economic_data.csv
-sql/config.py
+sql/config.py 
