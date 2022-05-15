@@ -1,5 +1,5 @@
 import os
-import config
+from config import config
 import pandas as pd
 import mysql.connector as mysql
 from mysql.connector import Error
@@ -15,7 +15,7 @@ def DBConnect(host_name, user_name, user_passwd, dbName=None):
     return conn, cur
 
 def emojiDB(dbName: str) -> None:
-    conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'), dbName)
+    conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'), dbName)
     try:
         dbQuery = f"ALTER DATABASE {dbName} CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;"
         cur.execute(dbQuery)
@@ -26,7 +26,7 @@ def emojiDB(dbName: str) -> None:
 
 def createDB(dbName: str) -> None:
     try:
-        conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'))
+        conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'))
         cur.execute(f"CREATE DATABASE IF NOT EXISTS {dbName};")
         conn.commit()
         cur.close()
@@ -36,7 +36,7 @@ def createDB(dbName: str) -> None:
     
 
 def createTables(dbName: str) -> None:
-    conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'), dbName)
+    conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'), dbName)
     sqlFile = '/home/codeally/project/Twitter-Data-Analysis/sql/schema.sql'
     fd = open(sqlFile, 'r')
     readSqlFile = fd.read()
@@ -67,7 +67,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> None:
-    conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'),dbName)
+    conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'),dbName)
 
     df = preprocess_df(df)
 
@@ -91,7 +91,7 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     return
 
 def db_execute_fetch(*args, many=False, tablename='', rdf=True, **kwargs) -> pd.DataFrame:
-    connection, cursor1 = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'),**kwargs)
+    connection, cursor1 = DBConnect(config.get('host'), config.get('user'), config.get('passwd'),**kwargs)
     if many:
         cursor1.executemany(*args)
     else:
