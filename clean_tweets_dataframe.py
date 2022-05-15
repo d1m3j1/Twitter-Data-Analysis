@@ -59,16 +59,17 @@ class Clean_Tweets:
     def preprocess_data(self) -> pd.DataFrame:    
         #text Preprocessing
         self.df['original_text'] = self.df['original_text'].astype(str)
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: x.lower())
-        self.df['original_text'] = self.df['original_text'].str.replace('[^\w\s]', '') #Remove punctuations
+        self.df['clean_tweet'] = self.df['original_text'].apply(lambda x: x.lower())
+        self.df['clean_tweet'] = self.df['clean_tweet'].apply(lambda x: x.lower())
+        self.df['clean_tweet'] = self.df['clean_tweet'].str.replace('[^\w\s]', '') #Remove punctuations
         return self.df
 
     def clean_tweet(self) -> pd.DataFrame:
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: emoji_pattern.sub(r'', x)) #Remove emojis
-        self.df['original_text'] =  self.df['original_text'].apply(lambda x: re.sub(r'RT @\w+:', '', x))#Remove identifications
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: re.sub(r'@\w+', '', x)) #Remove mentions
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: re.sub(r'https,?://[^/s]+[/s]?', '', x))#Remove links
-        self.df['original_text'] = self.df['original_text'].apply(lambda x: re.sub(r'\b\w{1,2}\b', '',x))#Remove words with 2 or fewer letters
+        self.df['clean_tweet'] = self.df['clean_tweet'].apply(lambda x: emoji_pattern.sub(r'', x)) #Remove emojis
+        self.df['clean_tweet'] =  self.df['clean_tweet'].apply(lambda x: re.sub(r'RT @\w+:', '', x))#Remove identifications
+        self.df['clean_tweet'] = self.df['clean_tweet'].apply(lambda x: re.sub(r'@\w+', '', x)) #Remove mentions
+        self.df['clean_tweet'] = self.df['clean_tweet'].apply(lambda x: re.sub(r'https,?://[^/s]+[/s]?', '', x))#Remove links
+        self.df['clean_tweet'] = self.df['clean_tweet'].apply(lambda x: re.sub(r'\b\w{1,2}\b', '',x))#Remove words with 2 or fewer letters
         return self.df
 
     def fill_nullvalues(self) -> pd.DataFrame:
@@ -105,6 +106,8 @@ class Clean_Tweets:
         self.df = self.remove_non_english_tweets()
         self.df = self.fill_nullvalues()
         
+        self.df = self.df[['statuses_count', 'created_at', 'source', 'original_text', 'clean_tweet', 'polarity','subjectivity', 'lang', 'favorite_count', 'retweet_count', 
+            'screen_name', 'followers_count','friends_count','sensitivity', 'hashtags', 'user_mentions', 'place']]
         if save:
             self.df.to_csv('data/clean_economic_data.csv', index=False)
             print('File Successfully Saved.!!!')
