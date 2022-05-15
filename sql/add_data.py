@@ -5,17 +5,6 @@ import mysql.connector as mysql
 from mysql.connector import Error
 
 def DBConnect(host_name, user_name, user_passwd, dbName=None):
-    """
-
-    Parameters
-    ----------
-    dbName :
-        Default value = None)
-
-    Returns
-    -------
-
-    """
     try :
         conn = mysql.connect(host=host_name, user=user_name, password=user_passwd,
                          database=dbName, buffered=True)
@@ -36,21 +25,6 @@ def emojiDB(dbName: str) -> None:
         print(f'Error "{err}" ecounted')
 
 def createDB(dbName: str) -> None:
-    """
-
-    Parameters
-    ----------
-    dbName :
-        str:
-    dbName :
-        str:
-    dbName:str :
-
-
-    Returns
-    -------
-
-    """
     try:
         conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'))
         cur.execute(f"CREATE DATABASE IF NOT EXISTS {dbName};")
@@ -62,21 +36,6 @@ def createDB(dbName: str) -> None:
     
 
 def createTables(dbName: str) -> None:
-    """
-
-    Parameters
-    ----------
-    dbName :
-        str:
-    dbName :
-        str:
-    dbName:str :
-
-
-    Returns
-    -------
-
-    """
     conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'), dbName)
     sqlFile = '/home/codeally/project/Twitter-Data-Analysis/sql/schema.sql'
     fd = open(sqlFile, 'r')
@@ -97,21 +56,6 @@ def createTables(dbName: str) -> None:
     return
 
 def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
-    """
-
-    Parameters
-    ----------
-    df :
-        pd.DataFrame:
-    df :
-        pd.DataFrame:
-    df:pd.DataFrame :
-
-
-    Returns
-    -------
-
-    """
     # cols_2_drop = ['original_text']
     try:
         # df = df.drop(columns=cols_2_drop, axis=1)
@@ -123,33 +67,6 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> None:
-    """
-
-    Parameters
-    ----------
-    dbName :
-        str:
-    df :
-        pd.DataFrame:
-    table_name :
-        str:
-    dbName :
-        str:
-    df :
-        pd.DataFrame:
-    table_name :
-        str:
-    dbName:str :
-
-    df:pd.DataFrame :
-
-    table_name:str :
-
-
-    Returns
-    -------
-
-    """
     conn, cur = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'),dbName)
 
     df = preprocess_df(df)
@@ -174,25 +91,6 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     return
 
 def db_execute_fetch(*args, many=False, tablename='', rdf=True, **kwargs) -> pd.DataFrame:
-    """
-
-    Parameters
-    ----------
-    *args :
-
-    many :
-         (Default value = False)
-    tablename :
-         (Default value = '')
-    rdf :
-         (Default value = True)
-    **kwargs :
-
-
-    Returns
-    -------
-
-    """
     connection, cursor1 = DBConnect(config.config.get('host'), config.config.get('user'), config.config.get('passwd'),**kwargs)
     if many:
         cursor1.executemany(*args)
@@ -225,6 +123,6 @@ if __name__ == "__main__":
     emojiDB(dbName='tweets')
     createTables(dbName='tweets')
 
-    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/clean_economic_data.csv')
+    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/git clean_economic_data.csv')
 
     insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')
