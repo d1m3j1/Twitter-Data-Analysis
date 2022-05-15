@@ -72,12 +72,12 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     df = preprocess_df(df)
 
     for _, row in df.iterrows():
-        sqlQuery = f"""INSERT INTO {table_name} (statuses_count, created_at, source, original_text, polarity, subjectivity, lang,
+        sqlQuery = f"""INSERT INTO {table_name} (statuses_count, created_at, source, original_text, clean_tweet, polarity, subjectivity, lang,
                     favorite_count, retweet_count, screen_name, followers_count, friends_count, sensitivity,
                     hashtags, user_mentions, place)
-             VALUES(%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+             VALUES(%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
         data = (row[0], row[1], row[2], row[3], (row[4]), (row[5]), row[6], row[7], row[8], row[9], row[10], row[11], 
-                (row[12]), (row[13]), (row[14]), (row[15]))
+                (row[12]), (row[13]), (row[14]), (row[15], row[[16]]))
 
         try:
             # Execute the SQL command
@@ -123,6 +123,6 @@ if __name__ == "__main__":
     emojiDB(dbName='tweets')
     createTables(dbName='tweets')
 
-    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/git clean_economic_data.csv')
+    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/clean_economic_data.csv')
 
     insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')
