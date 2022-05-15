@@ -86,6 +86,7 @@ class Clean_Tweets:
         self.df['screen_name'] = self.df['screen_name'].fillna(" ")
         self.df['lang'] = self.df['lang'].fillna(" ")
         self.df['original_text'] = self.df['original_text'].fillna(" ")
+        self.df['clean_tweet'] = self.df['clean_tweet'].fillna(" ")
         self.df['source'] = self.df['source'].fillna(" ")
         return self.df
 
