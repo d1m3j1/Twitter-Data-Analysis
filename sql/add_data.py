@@ -77,7 +77,7 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
                     hashtags, user_mentions, place)
              VALUES(%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
         data = (row[0], row[1], row[2], row[3], (row[4]), (row[5]), row[6], row[7], row[8], row[9], row[10], row[11], 
-                (row[12]), (row[13]), (row[14]), (row[15], row[[16]]))
+                (row[12]), (row[13]), (row[14]), (row[15]), (row[16]))
 
         try:
             # Execute the SQL command
@@ -122,7 +122,9 @@ if __name__ == "__main__":
     createDB(dbName='tweets')
     emojiDB(dbName='tweets')
     createTables(dbName='tweets')
-
-    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/clean_economic_data.csv' )
-
-    insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')
+    
+    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/clean_economic_data.csv')
+    try: 
+        insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')
+    except Exception as err: 
+        print(f'Variable "{err}"')
