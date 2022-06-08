@@ -3,6 +3,15 @@ from config import config
 import pandas as pd
 import mysql.connector as mysql
 from mysql.connector import Error
+from configparser import ConfigParser
+
+config = ConfigParser()
+file = 'config.ini'
+config.read(file)
+
+config['aws']['host']
+config['aws.server.com']['user']
+config['aws.server.com']['passwd']
 
 def DBConnect(host_name, user_name, user_passwd, dbName=None):
     try :
@@ -15,7 +24,7 @@ def DBConnect(host_name, user_name, user_passwd, dbName=None):
     return conn, cur
 
 def emojiDB(dbName: str) -> None:
-    conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'), dbName)
+    conn, cur = DBConnect(config['aws']['host'], config['aws.server.com']['user'], config['aws.server.com']['passwd'], dbName)
     try:
         dbQuery = f"ALTER DATABASE {dbName} CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;"
         cur.execute(dbQuery)
@@ -26,7 +35,7 @@ def emojiDB(dbName: str) -> None:
 
 def createDB(dbName: str) -> None:
     try:
-        conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'))
+        conn, cur = DBConnect(config['aws']['host'], config['aws.server.com']['user'], config['aws.server.com']['passwd'])
         cur.execute(f"CREATE DATABASE IF NOT EXISTS {dbName};")
         conn.commit()
         cur.close()
@@ -36,8 +45,8 @@ def createDB(dbName: str) -> None:
     
 
 def createTables(dbName: str) -> None:
-    conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'), dbName)
-    sqlFile = '/home/codeally/project/Twitter-Data-Analysis/sql/schema.sql'
+    conn, cur = DBConnect(config['aws']['host'], config['aws.server.com']['user'], config['aws.server.com']['passwd'], dbName)
+    sqlFile = 'schema.sql'
     fd = open(sqlFile, 'r')
     readSqlFile = fd.read()
     fd.close()
@@ -67,7 +76,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> None:
-    conn, cur = DBConnect(config.get('host'), config.get('user'), config.get('passwd'),dbName)
+    conn, cur = DBConnect(config['aws']['host'], config['aws.server.com']['user'], config['aws.server.com']['passwd'],dbName)
 
     df = preprocess_df(df)
 
@@ -91,7 +100,7 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     return
 
 def db_execute_fetch(*args, many=False, tablename='', rdf=True, **kwargs) -> pd.DataFrame:
-    connection, cursor1 = DBConnect(config.get('host'), config.get('user'), config.get('passwd'),**kwargs)
+    connection, cursor1 = DBConnect(config['aws']['host'], config['aws.server.com']['user'], config['aws.server.com']['passwd'],**kwargs)
     if many:
         cursor1.executemany(*args)
     else:
@@ -123,7 +132,7 @@ if __name__ == "__main__":
     emojiDB(dbName='tweets')
     createTables(dbName='tweets')
     
-    df = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/data/clean_economic_data.csv')
+    df = pd.read_csv('../data/clean_economic_data.csv')
     try: 
         insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')
     except Exception as err: 

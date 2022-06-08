@@ -2,7 +2,7 @@ import sys, os
 import unittest
 import pandas as pd
 
-sys.path.append(os.path.abspath(os.path.join('../')))
+sys.path.append(os.path.abspath(os.path.join('../scripts')))
 print(os.getcwd())
 
 from extract_dataframe import read_json

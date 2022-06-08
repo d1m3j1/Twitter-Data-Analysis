@@ -3,10 +3,10 @@ import unittest
 import pandas as pd
 import pandas.api.types as ptypes
 
-sys.path.append(os.path.abspath(os.path.join('..')))
+sys.path.append(os.path.abspath(os.path.join('../scripts')))
 from clean_tweets_dataframe import Clean_Tweets
 
-cleaned_tweets = pd.read_csv('/home/codeally/project/Twitter-Data-Analysis/processed_tweet_data.csv')
+cleaned_tweets = pd.read_csv('../data/processed_tweet_data.csv')
 
 
 class TestCleanTweet(unittest.TestCase):

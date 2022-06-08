@@ -176,7 +176,7 @@ class TweetDfExtractor:
         df = pd.DataFrame(data=data, columns=columns)
 
         if save:
-            df.to_csv('processed_tweet_data.csv', index=False)
+            df.to_csv('data/processed_tweet_data.csv', index=False)
             print('File Successfully Saved.!!!')
         
         return df
@@ -187,6 +187,6 @@ if __name__ == "__main__":
     columns = ['statuses_count', 'created_at', 'source', 'original_text', 'sentiment','polarity','subjectivity', 'lang', 'favorite_count', 'retweet_count', 
      'screen_name','followers_count','friends_count','sensitivity', 'hashtags', 'user_mentions', 'place']
     # _, tweet_list = read_json("../Economic_Twitter_Data.json")
-    _, tweet_list = read_json("/home/codeally/project/Twitter-Data-Analysis/data/Economic_Twitter_Data.json")
+    _, tweet_list = read_json("data/Economic_Twitter_Data.json")
     tweet = TweetDfExtractor(tweet_list)
     tweet_df = tweet.get_tweet_df(True) 

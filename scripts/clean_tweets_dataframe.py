@@ -115,6 +115,6 @@ class Clean_Tweets:
         return self.df
 
 if __name__ == "__main__":
-    df = pd.read_csv("/home/codeally/project/Twitter-Data-Analysis/data/processed_tweet_data.csv")
+    df = pd.read_csv("data/processed_tweet_data.csv")
     cleaner = Clean_Tweets(df)
     cleaner.clean_data(True)
